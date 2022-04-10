@@ -2,13 +2,140 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	fmt.Println(strconv.FormatInt(760, 2))
-	fmt.Print(BinGap(760))
+	fmt.Print(LargestPalindromProduct(3))
+}
+
+// ProjectEuler question - 4
+func LargestPalindromProduct(d float64) (int, int) {
+	// e.g. d= 2-> 10^2-1 = 99 -> 99*99
+	x := math.Pow(10, d)
+	m := math.Pow((x - 1), 2)
+	intX := int(x)
+	fmt.Printf("X value : %f \n", x)
+	for i := m; i >= 0; i-- {
+		if IsPalindrome(int(i)) {
+			fmt.Printf("Palindrome found %f \n", i)
+			for j := int(x); j > 0; j-- {
+				r := int(i) / j
+				if int(i)%j == 0 && r < intX {
+					return j, r
+				}
+			}
+		}
+	}
+
+	return 0, 0
+}
+
+func IsPalindrome(n int) bool {
+	s := fmt.Sprintf("%d", n)
+	charArr := []rune(s)
+	l := len(s)
+	for i := l / 2; i >= 0; i-- {
+		if charArr[i] != charArr[l-i-1] {
+			return false
+		}
+	}
+	return true
+}
+
+func LargestPrimeFactor(n int) int {
+	for i := n / 13; i > 1; i-- {
+		if n%i == 0 {
+			if IsPrime(i) {
+				return i
+			}
+		}
+	}
+	return 1
+}
+
+func IsPrime(n int) bool {
+	d := false
+	if n%2 == 0 || n%3 == 0 || n%5 == 0 || n%7 == 0 || n%11 == 0 || n%13 == 0 {
+		return false
+	}
+	for j := 2; j <= n/2; j++ {
+		if n%j == 0 {
+			d = true
+			break
+		}
+	}
+	fmt.Println(n)
+	return !d
+}
+
+func PrimeSeries(r int) []int {
+	ps := make([]int, 0)
+	c := 0
+	for i := 2; c < r; i++ {
+
+		if c >= r {
+			return ps
+		}
+		if i == 2 {
+			ps = append(ps, i)
+			c++
+			continue
+		}
+		d := false
+	innerLoop:
+		for j := 2; j <= i/2; j++ {
+			if i%j == 0 {
+				d = true
+				break innerLoop
+			}
+		}
+		if !d {
+			ps = append(ps, i)
+		}
+		c++
+	}
+	return ps
+}
+
+func EvenFib(r int) int {
+	c := 0
+	fv := 0
+	for n := 0; fv < r; n++ {
+		fv = optimizedFib(n)
+		if fv > r {
+			continue
+		}
+		if fv%2 == 0 {
+			c += fv
+		}
+	}
+	return c
+}
+
+func optimizedFib(n int) int {
+	if n >= 0 && n < 2 {
+		return n
+	} else {
+		b := make([]int, 0)
+		b = append(b, 0, 1)
+		for i := 2; i < n+1; i++ {
+			b = append(b, b[i-1]+b[i-2])
+		}
+		return b[n]
+	}
+}
+
+func SumOfMultipliers(n int, m int, r int) int {
+	c := 0
+	for i := 0; i < r; i++ {
+		if i%n == 0 || i%m == 0 {
+			c += i
+		}
+	}
+	return c
 }
 
 func BinGap(N int) int {
