@@ -8,7 +8,62 @@ import (
 )
 
 func main() {
-	fmt.Print(LargestPalindromProduct(3))
+	fmt.Print(Primes(10001))
+}
+
+// project-euler 7
+func Primes(r int) int {
+	c := 1
+	p := 0
+	for i := 2; c <= r; i++ {
+		if i == 2 {
+			p = i
+			c++
+			continue
+		}
+		d := false
+	innerLoop:
+		for j := 2; j <= i/2; j++ {
+			if i%j == 0 {
+				d = true
+				break innerLoop
+			}
+		}
+		if !d {
+			p = i
+			c++
+		}
+	}
+	return p
+}
+
+// project-euler 6
+func SumOfSquareDiff(n int) int {
+	x := 0
+	y := 0
+	for i := 1; i <= n; i++ {
+		x += int(math.Pow(float64(i), 2))
+		y += i
+	}
+	return (int(math.Pow(float64(y), 2)) - x)
+}
+
+// projectEuler q-5
+func EvenlyDevidable(m int) int {
+	for i := m; true; i += m {
+		b := true
+	innerLoop:
+		for j := 1; j <= m; j++ {
+			if i%j != 0 {
+				b = false
+				break innerLoop
+			}
+		}
+		if b {
+			return i
+		}
+	}
+	return 0
 }
 
 // ProjectEuler question - 4
