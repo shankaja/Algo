@@ -8,7 +8,46 @@ import (
 )
 
 func main() {
-	fmt.Print(Primes(10001))
+	s := []string{"the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"}
+	fmt.Print(topKFrequent(s, 4))
+}
+
+// leetcode 692
+func topKFrequent(words []string, k int) []string {
+	m := make(map[string]int)
+	s := make([]string, 0)
+	for _, w := range words {
+		m[w]++
+	}
+
+	x := ""
+	for i := 1; i <= k; i++ {
+		m, x = popTopFreq(m)
+		s = append(s, x)
+	}
+	return s
+}
+
+func popTopFreq(words map[string]int) (map[string]int, string) {
+
+	max := 0
+	maxK := ""
+	for k, v := range words {
+		if max < v {
+			max = v
+			maxK = k
+		}
+	}
+	words[maxK] = 0
+	return words, maxK
+}
+
+func Limiter(n int) int {
+	if n == 6 {
+		return 3
+	} else {
+		return 3 * Limiter(n+1)
+	}
 }
 
 // project-euler 7
