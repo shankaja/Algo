@@ -8,38 +8,49 @@ import (
 )
 
 func main() {
-	s := []string{"the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"}
-	fmt.Print(topKFrequent(s, 4))
+	s := []string{"a", "aaa", "aaaa"}
+	fmt.Print(topKFrequent(s, 3))
 }
 
 // leetcode 692
 func topKFrequent(words []string, k int) []string {
 	m := make(map[string]int)
 	s := make([]string, 0)
-	for _, w := range words {
-		m[w]++
+	keys := make([]string, 0)
+	// always try to stick to this for loop as this promises the order
+	for i := 0; i < len(words); i++ {
+		if m[words[i]] == 0 {
+			keys = append(keys, words[i])
+		}
+		m[words[i]]++
 	}
 
 	x := ""
 	for i := 1; i <= k; i++ {
-		m, x = popTopFreq(m)
+		m, x, keys = popTopFreq(m, keys)
 		s = append(s, x)
 	}
 	return s
 }
 
-func popTopFreq(words map[string]int) (map[string]int, string) {
+func popTopFreq(words map[string]int, order []string) (map[string]int, string, []string) {
 
 	max := 0
 	maxK := ""
-	for k, v := range words {
-		if max < v {
-			max = v
+	maxI := 0
+	for i, k := range order {
+		if max < words[k] {
+			max = words[k]
 			maxK = k
+			maxI = i
 		}
 	}
 	words[maxK] = 0
-	return words, maxK
+	return words, maxK, RemoveIndex(order, maxI)
+}
+
+func RemoveIndex(s []string, index int) []string {
+	return append(s[:index], s[index+1:]...)
 }
 
 func Limiter(n int) int {
